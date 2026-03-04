@@ -22,14 +22,14 @@ const categories = [...new Set(posts.map(p => p.data.category))].sort();
     <div class="flex flex-wrap justify-center gap-3 mb-12">
       <a
         href="/blog"
-        class="text-xs font-medium tracking-wide uppercase px-4 py-2 border border-(--color-accent) text-(--color-accent) hover:bg-(--color-accent) hover:text-white transition-colors"
+        class="text-xs font-medium tracking-wide uppercase px-4 py-2 rounded-full border border-(--color-accent) text-(--color-accent) hover:bg-(--color-accent) hover:text-white transition-colors"
       >
         All
       </a>
       {categories.map(cat => (
         <a
           href={`/blog/category/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-          class="text-xs font-medium tracking-wide uppercase px-4 py-2 border border-(--color-rule) text-(--color-ink-muted) hover:border-(--color-accent) hover:text-(--color-accent) transition-colors"
+          class="text-xs font-medium tracking-wide uppercase px-4 py-2 rounded-full border border-(--color-rule) text-(--color-ink-muted) hover:border-(--color-accent) hover:text-(--color-accent) transition-colors"
         >
           {cat}
         </a>

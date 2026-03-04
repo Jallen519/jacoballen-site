@@ -6,15 +6,17 @@
   --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace;
 
-  --color-cream: #FAF8F5;
-  --color-cream-dark: #F0EDE8;
-  --color-ink: #1a1a1a;
-  --color-ink-light: #4a4a4a;
-  --color-ink-muted: #7a7a7a;
+  --color-cream: #F5F0E8;
+  --color-cream-dark: #EBE4D8;
+  --color-cream-warm: #F0E9DD;
+  --color-ink: #2B2520;
+  --color-ink-light: #52493F;
+  --color-ink-muted: #8A7F72;
   --color-accent: #509ca1;
   --color-accent-dark: #3d7a7e;
-  --color-rule: #e0dbd4;
-  --color-rule-light: #ece8e1;
+  --color-accent-soft: #509ca115;
+  --color-rule: #D8D0C4;
+  --color-rule-light: #E5DED4;
 }
 
 body {
