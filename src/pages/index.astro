@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
+import NewsletterCTA from '../components/NewsletterCTA.astro';
 import BlogCard from '../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
 
@@ -11,50 +12,50 @@ const posts = allPosts
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-const pillars = [
+const topics = [
   {
     title: 'Real Estate',
-    description: 'Acquiring and operating residential investment properties. Building systems that scale.',
+    description: 'Strategy, deals, creative financing, and building a portfolio from scratch.',
     icon: '🏠',
   },
   {
-    title: 'Artificial Intelligence',
-    description: 'Building AI-powered tools and workflows. Turning automation into competitive advantage.',
-    icon: '🤖',
+    title: 'Markets & Finance',
+    description: 'Wealth building, macro trends, and what financial freedom actually requires.',
+    icon: '📈',
   },
   {
-    title: 'Entrepreneurship',
-    description: 'Growing businesses from zero. Strategy, operations, and the lessons learned along the way.',
-    icon: '🚀',
+    title: 'AI & Automation',
+    description: 'How technology is changing the game for investors and operators.',
+    icon: '🤖',
   },
 ];
 ---
 
 <BaseLayout title="Home">
   <Nav />
-  <div class="max-w-5xl mx-auto px-6">
+  <div class="max-w-3xl mx-auto px-6">
     <Hero />
 
-    <section class="py-16 border-t border-zinc-800">
-      <h2 class="text-2xl font-bold text-zinc-50 mb-10">What I Focus On</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        {pillars.map(p => (
-          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-            <div class="text-3xl mb-4">{p.icon}</div>
-            <h3 class="text-lg font-semibold text-zinc-50 mb-2">{p.title}</h3>
-            <p class="text-sm text-zinc-400">{p.description}</p>
+    <section class="py-16 border-t border-(--color-rule)">
+      <h2 class="font-serif text-2xl md:text-3xl font-semibold text-(--color-ink) mb-10 text-center">What I Write About</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        {topics.map(t => (
+          <div class="text-center">
+            <div class="text-3xl mb-4">{t.icon}</div>
+            <h3 class="font-serif text-lg font-semibold text-(--color-ink) mb-2">{t.title}</h3>
+            <p class="text-sm text-(--color-ink-muted) leading-relaxed">{t.description}</p>
           </div>
         ))}
       </div>
     </section>
 
     {posts.length > 0 && (
-      <section class="py-16 border-t border-zinc-800">
+      <section class="py-16 border-t border-(--color-rule)">
         <div class="flex items-center justify-between mb-10">
-          <h2 class="text-2xl font-bold text-zinc-50">Latest Posts</h2>
-          <a href="/blog" class="text-sm text-amber-400 hover:underline">View all &rarr;</a>
+          <h2 class="font-serif text-2xl md:text-3xl font-semibold text-(--color-ink)">Latest Posts</h2>
+          <a href="/blog" class="text-sm font-medium tracking-wide uppercase text-(--color-accent) hover:text-(--color-accent-dark) transition-colors">View all &rarr;</a>
         </div>
-        <div class="grid md:grid-cols-3 gap-6">
+        <div class="space-y-0 divide-y divide-(--color-rule-light)">
           {posts.map(post => (
             <BlogCard
               title={post.data.title}
@@ -66,6 +67,10 @@ const pillars = [
         </div>
       </section>
     )}
+
+    <div class="border-t border-(--color-rule)">
+      <NewsletterCTA />
+    </div>
   </div>
   <Footer />
 </BaseLayout>

@@ -4,11 +4,11 @@ import { socials } from '../data/socials';
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-zinc-800 mt-24">
-  <div class="max-w-5xl mx-auto px-6 py-12">
+<footer class="border-t border-(--color-rule) mt-12">
+  <div class="max-w-3xl mx-auto px-6 py-12">
     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <p class="text-sm text-zinc-500">
-        &copy; {year} Jacob Allen. All rights reserved.
+      <p class="text-sm text-(--color-ink-muted)">
+        &copy; {year} Jacob Allen
       </p>
       <div class="flex items-center gap-6">
         {socials.map(s => (
@@ -16,7 +16,7 @@ const year = new Date().getFullYear();
             href={s.url}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-sm text-zinc-500 hover:text-amber-400 transition-colors"
+            class="text-sm text-(--color-ink-muted) hover:text-(--color-accent) transition-colors"
           >
             {s.name}
           </a>

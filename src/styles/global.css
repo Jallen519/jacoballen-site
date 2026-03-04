@@ -2,17 +2,33 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Raleway', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace;
+
+  --color-cream: #FAF8F5;
+  --color-cream-dark: #F0EDE8;
+  --color-ink: #1a1a1a;
+  --color-ink-light: #4a4a4a;
+  --color-ink-muted: #7a7a7a;
+  --color-accent: #509ca1;
+  --color-accent-dark: #3d7a7e;
+  --color-rule: #e0dbd4;
+  --color-rule-light: #ece8e1;
 }
 
 body {
-  background-color: var(--color-zinc-950);
-  color: var(--color-zinc-50);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
   min-height: 100vh;
   margin: 0;
 }
 
+::selection {
+  background-color: var(--color-accent);
+  color: white;
+}
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-zinc-700); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--color-rule); border-radius: 3px; }

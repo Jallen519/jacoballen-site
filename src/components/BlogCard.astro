@@ -12,20 +12,21 @@ interface Props {
 const { title, date, category, slug, excerpt } = Astro.props;
 ---
 
-<a href={`/blog/${slug}`} class="group block bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors">
-  <div class="flex items-center gap-3 mb-3">
-    <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20">
+<a href={`/blog/${slug}`} class="group block py-6 first:pt-0 last:pb-0">
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-medium tracking-wide uppercase text-(--color-accent)">
       {category}
     </span>
-    <time class="text-xs text-zinc-500" datetime={date.toISOString()}>
+    <span class="text-(--color-rule)">&middot;</span>
+    <time class="text-xs text-(--color-ink-muted)" datetime={date.toISOString()}>
       {formatDate(date)}
     </time>
   </div>
-  <h3 class="text-lg font-semibold text-zinc-50 group-hover:text-amber-400 transition-colors mb-2">
+  <h3 class="font-serif text-xl font-semibold text-(--color-ink) group-hover:text-(--color-accent) transition-colors mb-1">
     {title}
   </h3>
   {excerpt && (
-    <p class="text-sm text-zinc-400 line-clamp-2">
+    <p class="text-sm text-(--color-ink-muted) line-clamp-2 leading-relaxed">
       {excerpt}
     </p>
   )}

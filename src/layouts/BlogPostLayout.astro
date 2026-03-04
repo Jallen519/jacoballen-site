@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import NewsletterCTA from '../components/NewsletterCTA.astro';
 import { formatDate } from '../lib/formatters';
 
 interface Props {
@@ -20,32 +21,36 @@ const { title, date, category, tags } = Astro.props;
     <article>
       <header class="mb-12">
         <div class="flex items-center gap-3 mb-4">
-          <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20">
+          <span class="text-xs font-medium tracking-wide uppercase text-(--color-accent)">
             {category}
           </span>
-          <time class="text-sm text-zinc-500" datetime={date.toISOString()}>
+          <span class="text-(--color-rule)">&middot;</span>
+          <time class="text-sm text-(--color-ink-muted)" datetime={date.toISOString()}>
             {formatDate(date)}
           </time>
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold text-zinc-50 leading-tight">
+        <h1 class="font-serif text-3xl md:text-4xl font-semibold text-(--color-ink) leading-tight">
           {title}
         </h1>
         {tags.length > 0 && (
           <div class="flex flex-wrap gap-2 mt-4">
             {tags.map(tag => (
-              <span class="text-xs text-zinc-500 px-2 py-0.5 rounded bg-zinc-800">
+              <span class="text-xs text-(--color-ink-muted) px-2 py-0.5 border border-(--color-rule-light)">
                 {tag}
               </span>
             ))}
           </div>
         )}
       </header>
-      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-50 prose-a:text-amber-400 prose-a:no-underline hover:prose-a:underline prose-code:text-amber-300 prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800">
+      <div class="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-(--color-ink) prose-headings:font-semibold prose-a:text-(--color-accent) prose-a:no-underline hover:prose-a:underline prose-p:text-(--color-ink-light) prose-p:leading-relaxed prose-code:text-(--color-accent-dark) prose-pre:bg-(--color-cream-dark) prose-pre:border prose-pre:border-(--color-rule-light) prose-strong:text-(--color-ink) prose-blockquote:border-(--color-accent) prose-blockquote:text-(--color-ink-muted) prose-blockquote:font-serif prose-blockquote:italic">
         <slot />
       </div>
     </article>
-    <div class="mt-16 pt-8 border-t border-zinc-800">
-      <a href="/blog" class="text-sm text-amber-400 hover:underline">&larr; Back to all posts</a>
+    <div class="mt-16 pt-8 border-t border-(--color-rule)">
+      <a href="/blog" class="text-sm font-medium tracking-wide uppercase text-(--color-accent) hover:text-(--color-accent-dark) transition-colors">&larr; Back to all posts</a>
+    </div>
+    <div class="border-t border-(--color-rule) mt-12">
+      <NewsletterCTA compact />
     </div>
   </main>
   <Footer />

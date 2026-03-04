@@ -5,32 +5,34 @@ import { socials, email } from '../data/socials';
 ---
 
 <PageLayout title="Contact" description="Get in touch with Jacob Allen.">
-  <h1 class="text-3xl md:text-4xl font-bold text-zinc-50 mb-4">Get in Touch</h1>
-  <p class="text-zinc-400 mb-12 max-w-2xl">
-    Have a question, opportunity, or just want to connect? Drop me a message and I'll get back to you.
-  </p>
+  <header class="mb-12 text-center">
+    <h1 class="font-serif text-3xl md:text-4xl font-semibold text-(--color-ink) mb-4">Get in Touch</h1>
+    <p class="text-(--color-ink-muted) max-w-xl mx-auto leading-relaxed">
+      Have a question, opportunity, or just want to connect? Drop me a message and I'll get back to you.
+    </p>
+  </header>
 
   <div class="grid md:grid-cols-5 gap-12">
     <div class="md:col-span-3">
       <ContactForm />
     </div>
     <div class="md:col-span-2">
-      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-        <h3 class="text-sm font-semibold text-zinc-50 mb-4">Other Ways to Reach Me</h3>
+      <div class="border border-(--color-rule-light) p-6">
+        <h3 class="text-sm font-semibold text-(--color-ink) mb-4 tracking-wide uppercase">Other Ways to Reach Me</h3>
         <div class="space-y-4">
           <div>
-            <p class="text-xs text-zinc-500 mb-1">Email</p>
-            <a href={`mailto:${email}`} class="text-sm text-amber-400 hover:underline">{email}</a>
+            <p class="text-xs text-(--color-ink-muted) mb-1">Email</p>
+            <a href={`mailto:${email}`} class="text-sm text-(--color-accent) hover:text-(--color-accent-dark) transition-colors">{email}</a>
           </div>
           <div>
-            <p class="text-xs text-zinc-500 mb-2">Socials</p>
+            <p class="text-xs text-(--color-ink-muted) mb-2">Socials</p>
             <div class="flex flex-col gap-2">
               {socials.map(s => (
                 <a
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="text-sm text-zinc-300 hover:text-amber-400 transition-colors"
+                  class="text-sm text-(--color-ink-light) hover:text-(--color-accent) transition-colors"
                 >
                   {s.name} &rarr;
                 </a>

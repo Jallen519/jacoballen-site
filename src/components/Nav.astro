@@ -2,7 +2,6 @@
 const pathname = Astro.url.pathname;
 
 const links = [
-  { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
@@ -14,9 +13,9 @@ function isActive(href: string): boolean {
 }
 ---
 
-<nav class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
-  <div class="max-w-5xl mx-auto px-6 flex items-center justify-between h-16">
-    <a href="/" class="text-lg font-semibold text-zinc-50 hover:text-amber-400 transition-colors">
+<nav class="border-b border-(--color-rule-light) sticky top-0 z-50 bg-(--color-cream)/95 backdrop-blur-sm">
+  <div class="max-w-3xl mx-auto px-6 flex items-center justify-between h-16">
+    <a href="/" class="font-serif text-xl font-semibold text-(--color-ink) hover:text-(--color-accent) transition-colors tracking-tight">
       Jacob Allen
     </a>
     <div class="hidden md:flex items-center gap-8">
@@ -24,10 +23,10 @@ function isActive(href: string): boolean {
         <a
           href={link.href}
           class:list={[
-            'text-sm transition-colors',
+            'text-sm font-medium tracking-wide uppercase transition-colors',
             isActive(link.href)
-              ? 'text-amber-400 font-medium'
-              : 'text-zinc-400 hover:text-zinc-50',
+              ? 'text-(--color-accent)'
+              : 'text-(--color-ink-muted) hover:text-(--color-ink)',
           ]}
         >
           {link.label}
@@ -36,23 +35,23 @@ function isActive(href: string): boolean {
     </div>
     <button
       id="mobile-menu-toggle"
-      class="md:hidden text-zinc-400 hover:text-zinc-50"
+      class="md:hidden text-(--color-ink-muted) hover:text-(--color-ink)"
       aria-label="Toggle menu"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
   </div>
-  <div id="mobile-menu" class="md:hidden hidden border-t border-zinc-800 bg-zinc-950 px-6 pb-4">
+  <div id="mobile-menu" class="md:hidden hidden border-t border-(--color-rule-light) bg-(--color-cream) px-6 pb-4">
     {links.map(link => (
       <a
         href={link.href}
         class:list={[
-          'block py-3 text-sm transition-colors',
+          'block py-3 text-sm font-medium tracking-wide uppercase transition-colors',
           isActive(link.href)
-            ? 'text-amber-400 font-medium'
-            : 'text-zinc-400 hover:text-zinc-50',
+            ? 'text-(--color-accent)'
+            : 'text-(--color-ink-muted) hover:text-(--color-ink)',
         ]}
       >
         {link.label}

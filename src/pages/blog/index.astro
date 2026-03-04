@@ -11,23 +11,25 @@ const categories = [...new Set(posts.map(p => p.data.category))].sort();
 ---
 
 <PageLayout title="Blog" description="Thoughts on real estate investing, AI, and building businesses — by Jacob Allen.">
-  <h1 class="text-3xl md:text-4xl font-bold text-zinc-50 mb-4">Blog</h1>
-  <p class="text-zinc-400 mb-12 max-w-2xl">
-    Writing about real estate, AI, and what I learn building businesses.
-  </p>
+  <header class="mb-12 text-center">
+    <h1 class="font-serif text-3xl md:text-4xl font-semibold text-(--color-ink) mb-4">Blog</h1>
+    <p class="text-(--color-ink-muted) max-w-xl mx-auto leading-relaxed">
+      Writing about real estate, AI, and what I learn building businesses.
+    </p>
+  </header>
 
   {categories.length > 1 && (
-    <div class="flex flex-wrap gap-2 mb-10">
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
       <a
         href="/blog"
-        class="text-xs font-medium px-3 py-1.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20 hover:bg-amber-400/20 transition-colors"
+        class="text-xs font-medium tracking-wide uppercase px-4 py-2 border border-(--color-accent) text-(--color-accent) hover:bg-(--color-accent) hover:text-white transition-colors"
       >
         All
       </a>
       {categories.map(cat => (
         <a
           href={`/blog/category/${cat.toLowerCase().replace(/\s+/g, '-')}`}
-          class="text-xs font-medium px-3 py-1.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 hover:text-zinc-50 hover:border-zinc-600 transition-colors"
+          class="text-xs font-medium tracking-wide uppercase px-4 py-2 border border-(--color-rule) text-(--color-ink-muted) hover:border-(--color-accent) hover:text-(--color-accent) transition-colors"
         >
           {cat}
         </a>
@@ -36,7 +38,7 @@ const categories = [...new Set(posts.map(p => p.data.category))].sort();
   )}
 
   {posts.length > 0 ? (
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="divide-y divide-(--color-rule-light)">
       {posts.map(post => (
         <BlogCard
           title={post.data.title}
@@ -48,7 +50,7 @@ const categories = [...new Set(posts.map(p => p.data.category))].sort();
     </div>
   ) : (
     <div class="text-center py-20">
-      <p class="text-zinc-500 text-lg">No posts yet. Check back soon.</p>
+      <p class="text-(--color-ink-muted) text-lg font-serif italic">No posts yet. Check back soon.</p>
     </div>
   )}
 </PageLayout>

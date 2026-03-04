@@ -22,13 +22,13 @@ const { category, posts } = Astro.props;
 ---
 
 <PageLayout title={category} description={`Posts about ${category} — Jacob Allen's blog.`}>
-  <div class="mb-12">
-    <a href="/blog" class="text-sm text-amber-400 hover:underline">&larr; All posts</a>
-    <h1 class="text-3xl md:text-4xl font-bold text-zinc-50 mt-4 mb-2">{category}</h1>
-    <p class="text-zinc-400">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+  <div class="mb-12 text-center">
+    <a href="/blog" class="text-sm font-medium tracking-wide uppercase text-(--color-accent) hover:text-(--color-accent-dark) transition-colors">&larr; All posts</a>
+    <h1 class="font-serif text-3xl md:text-4xl font-semibold text-(--color-ink) mt-4 mb-2">{category}</h1>
+    <p class="text-(--color-ink-muted)">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
   </div>
 
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="divide-y divide-(--color-rule-light)">
     {posts.map(post => (
       <BlogCard
         title={post.data.title}
