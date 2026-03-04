@@ -16,17 +16,14 @@ const topics = [
   {
     title: 'Real Estate',
     description: 'Strategy, deals, creative financing, and building a portfolio from scratch.',
-    icon: '🏠',
   },
   {
     title: 'Markets & Finance',
     description: 'Wealth building, macro trends, and what financial freedom actually requires.',
-    icon: '📈',
   },
   {
     title: 'AI & Automation',
     description: 'How technology is changing the game for investors and operators.',
-    icon: '🤖',
   },
 ];
 ---
@@ -40,9 +37,8 @@ const topics = [
       <h2 class="font-serif text-2xl md:text-3xl font-semibold text-(--color-ink) mb-10 text-center">What I Write About</h2>
       <div class="grid md:grid-cols-3 gap-8">
         {topics.map(t => (
-          <div class="text-center">
-            <div class="text-3xl mb-4">{t.icon}</div>
-            <h3 class="font-serif text-lg font-semibold text-(--color-ink) mb-2">{t.title}</h3>
+          <div class="text-center pt-6 border-t-2 border-(--color-accent)/30">
+            <h3 class="font-serif text-lg font-semibold text-(--color-ink) mb-3">{t.title}</h3>
             <p class="text-sm text-(--color-ink-muted) leading-relaxed">{t.description}</p>
           </div>
         ))}
