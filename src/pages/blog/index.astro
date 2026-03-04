@@ -1,0 +1,54 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog').catch(() => []);
+const posts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categories = [...new Set(posts.map(p => p.data.category))].sort();
+---
+
+<PageLayout title="Blog" description="Thoughts on real estate investing, AI, and building businesses — by Jacob Allen.">
+  <h1 class="text-3xl md:text-4xl font-bold text-zinc-50 mb-4">Blog</h1>
+  <p class="text-zinc-400 mb-12 max-w-2xl">
+    Writing about real estate, AI, and what I learn building businesses.
+  </p>
+
+  {categories.length > 1 && (
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a
+        href="/blog"
+        class="text-xs font-medium px-3 py-1.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20 hover:bg-amber-400/20 transition-colors"
+      >
+        All
+      </a>
+      {categories.map(cat => (
+        <a
+          href={`/blog/category/${cat.toLowerCase().replace(/\s+/g, '-')}`}
+          class="text-xs font-medium px-3 py-1.5 rounded-full bg-zinc-800 text-zinc-400 border border-zinc-700 hover:text-zinc-50 hover:border-zinc-600 transition-colors"
+        >
+          {cat}
+        </a>
+      ))}
+    </div>
+  )}
+
+  {posts.length > 0 ? (
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map(post => (
+        <BlogCard
+          title={post.data.title}
+          date={post.data.date}
+          category={post.data.category}
+          slug={post.id}
+        />
+      ))}
+    </div>
+  ) : (
+    <div class="text-center py-20">
+      <p class="text-zinc-500 text-lg">No posts yet. Check back soon.</p>
+    </div>
+  )}
+</PageLayout>

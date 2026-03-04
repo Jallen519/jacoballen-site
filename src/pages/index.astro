@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog').catch(() => []);
+const posts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const pillars = [
+  {
+    title: 'Real Estate',
+    description: 'Acquiring and operating residential investment properties. Building systems that scale.',
+    icon: '🏠',
+  },
+  {
+    title: 'Artificial Intelligence',
+    description: 'Building AI-powered tools and workflows. Turning automation into competitive advantage.',
+    icon: '🤖',
+  },
+  {
+    title: 'Entrepreneurship',
+    description: 'Growing businesses from zero. Strategy, operations, and the lessons learned along the way.',
+    icon: '🚀',
+  },
+];
+---
+
+<BaseLayout title="Home">
+  <Nav />
+  <div class="max-w-5xl mx-auto px-6">
+    <Hero />
+
+    <section class="py-16 border-t border-zinc-800">
+      <h2 class="text-2xl font-bold text-zinc-50 mb-10">What I Focus On</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        {pillars.map(p => (
+          <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+            <div class="text-3xl mb-4">{p.icon}</div>
+            <h3 class="text-lg font-semibold text-zinc-50 mb-2">{p.title}</h3>
+            <p class="text-sm text-zinc-400">{p.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {posts.length > 0 && (
+      <section class="py-16 border-t border-zinc-800">
+        <div class="flex items-center justify-between mb-10">
+          <h2 class="text-2xl font-bold text-zinc-50">Latest Posts</h2>
+          <a href="/blog" class="text-sm text-amber-400 hover:underline">View all &rarr;</a>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+          {posts.map(post => (
+            <BlogCard
+              title={post.data.title}
+              date={post.data.date}
+              category={post.data.category}
+              slug={post.id}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+  <Footer />
+</BaseLayout>

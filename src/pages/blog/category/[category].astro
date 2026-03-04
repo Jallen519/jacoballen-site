@@ -1,0 +1,41 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categories = [...new Set(posts.map(p => p.data.category))];
+
+  return categories.map(category => ({
+    params: { category: category.toLowerCase().replace(/\s+/g, '-') },
+    props: {
+      category,
+      posts: posts
+        .filter(p => p.data.category === category)
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { category, posts } = Astro.props;
+---
+
+<PageLayout title={category} description={`Posts about ${category} — Jacob Allen's blog.`}>
+  <div class="mb-12">
+    <a href="/blog" class="text-sm text-amber-400 hover:underline">&larr; All posts</a>
+    <h1 class="text-3xl md:text-4xl font-bold text-zinc-50 mt-4 mb-2">{category}</h1>
+    <p class="text-zinc-400">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+  </div>
+
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {posts.map(post => (
+      <BlogCard
+        title={post.data.title}
+        date={post.data.date}
+        category={post.data.category}
+        slug={post.id}
+      />
+    ))}
+  </div>
+</PageLayout>
