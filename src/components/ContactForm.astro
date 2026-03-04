@@ -1,4 +1,4 @@
-<form action="/api/contact" method="POST" class="space-y-6">
+<form data-contact-form action="/api/contact" method="POST" class="space-y-6">
   <div>
     <label for="name" class="block text-sm font-medium text-(--color-ink) mb-2">Name</label>
     <input
@@ -38,4 +38,52 @@
   >
     Send Message
   </button>
+  <p data-contact-success class="hidden text-sm text-(--color-accent) font-medium">
+    Message sent. I'll get back to you soon.
+  </p>
+  <p data-contact-error class="hidden text-sm text-red-600">
+    Something went wrong. Please try again.
+  </p>
 </form>
+
+<script>
+  document.querySelectorAll('[data-contact-form]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formEl = e.target as HTMLFormElement;
+      const formData = new FormData(formEl);
+      const successEl = formEl.querySelector('[data-contact-success]');
+      const errorEl = formEl.querySelector('[data-contact-error]');
+      const button = formEl.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+      button.disabled = true;
+      button.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (res.ok) {
+          formEl.reset();
+          successEl?.classList.remove('hidden');
+          errorEl?.classList.add('hidden');
+          button.textContent = 'Sent';
+        } else {
+          const data = await res.json();
+          if (errorEl) {
+            errorEl.textContent = data.error || 'Something went wrong. Please try again.';
+            errorEl.classList.remove('hidden');
+          }
+          button.disabled = false;
+          button.textContent = 'Send Message';
+        }
+      } catch {
+        errorEl?.classList.remove('hidden');
+        button.disabled = false;
+        button.textContent = 'Send Message';
+      }
+    });
+  });
+</script>

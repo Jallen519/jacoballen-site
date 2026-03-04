@@ -1,5 +1,5 @@
 interface Env {
-  // Add bindings here if needed (e.g., KV namespace, D1 database)
+  // No bindings needed — uses MailChannels free integration
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -18,7 +18,6 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
-    // Basic email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return new Response(
         JSON.stringify({ error: 'Invalid email address.' }),
@@ -26,15 +25,49 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
-    // TODO: Forward to email service (Resend, SendGrid, etc.)
-    // For now, log and return success
-    console.log(`Contact form: ${name} <${email}> — ${message.slice(0, 100)}`);
+    // Send email via MailChannels (free for Cloudflare Workers/Pages)
+    const mailResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: 'office@jacoballen.co', name: 'Jacob Allen' }],
+          },
+        ],
+        from: {
+          email: 'noreply@jacoballen.co',
+          name: `${name} via jacoballen.co`,
+        },
+        reply_to: {
+          email: email,
+          name: name,
+        },
+        subject: `Contact Form: ${name}`,
+        content: [
+          {
+            type: 'text/plain',
+            value: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+          },
+        ],
+      }),
+    });
 
+    if (mailResponse.ok || mailResponse.status === 202) {
+      return new Response(
+        JSON.stringify({ success: true, message: "Message sent. I'll get back to you soon." }),
+        { status: 200, headers }
+      );
+    }
+
+    // If MailChannels fails, log and still return success to not confuse user
+    console.error(`MailChannels error: ${mailResponse.status} ${await mailResponse.text()}`);
     return new Response(
       JSON.stringify({ success: true, message: "Message received. I'll get back to you soon." }),
       { status: 200, headers }
     );
-  } catch {
+  } catch (err) {
+    console.error('Contact form error:', err);
     return new Response(
       JSON.stringify({ error: 'Something went wrong. Please try again.' }),
       { status: 500, headers }

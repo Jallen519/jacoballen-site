@@ -1,6 +1,5 @@
 interface Env {
-  // Add KV namespace binding here when ready:
-  // SUBSCRIBERS: KVNamespace;
+  // No bindings needed — uses MailChannels free integration
 }
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
@@ -27,19 +26,40 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
-    // Log the subscriber for now — replace with KV, D1, or email provider later
-    console.log(`New subscriber: ${email} at ${new Date().toISOString()}`);
+    // Notify you of new subscriber via MailChannels
+    const mailResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: 'office@jacoballen.co', name: 'Jacob Allen' }],
+          },
+        ],
+        from: {
+          email: 'noreply@jacoballen.co',
+          name: 'jacoballen.co',
+        },
+        subject: `New Subscriber: ${email}`,
+        content: [
+          {
+            type: 'text/plain',
+            value: `New newsletter subscriber:\n\n${email}\n\nSubscribed at: ${new Date().toISOString()}`,
+          },
+        ],
+      }),
+    });
 
-    // TODO: When you pick an email provider, replace this with:
-    // - Beehiiv: POST to https://api.beehiiv.com/v2/publications/{pub_id}/subscriptions
-    // - ConvertKit: POST to https://api.convertkit.com/v3/forms/{form_id}/subscribe
-    // - Or store in Cloudflare KV: await context.env.SUBSCRIBERS.put(email, JSON.stringify({ date: new Date().toISOString() }));
+    if (!mailResponse.ok && mailResponse.status !== 202) {
+      console.error(`MailChannels error: ${mailResponse.status} ${await mailResponse.text()}`);
+    }
 
     return new Response(
       JSON.stringify({ success: true }),
       { status: 200, headers }
     );
-  } catch {
+  } catch (err) {
+    console.error('Subscribe error:', err);
     return new Response(
       JSON.stringify({ error: 'Something went wrong. Please try again.' }),
       { status: 500, headers }
