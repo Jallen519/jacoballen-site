@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run fetch-blog && astro build",
+    "build:local": "astro build",
     "preview": "astro preview",
     "fetch-blog": "rm -rf src/content/blog && git clone --depth 1 https://github.com/Jallen519/Jacob-Allen-Blog.git src/content/blog",
     "dev:full": "npm run fetch-blog && astro dev",
