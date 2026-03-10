@@ -1,0 +1,181 @@
+<!-- AI Chat Widget -->
+<div id="chat-widget">
+  <!-- Floating Button -->
+  <button
+    id="chat-toggle"
+    aria-label="Chat with AI assistant"
+    class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-(--color-accent) hover:bg-(--color-accent-dark) text-white shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+  >
+    <svg id="chat-icon-open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 20.25V4.5A2.25 2.25 0 016 2.25h12A2.25 2.25 0 0120.25 4.5v10.5A2.25 2.25 0 0118 17.25H7.5l-3.75 3z" />
+    </svg>
+    <svg id="chat-icon-close" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+
+  <!-- Chat Window -->
+  <div
+    id="chat-window"
+    class="fixed bottom-24 right-6 z-50 hidden w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl border border-(--color-rule) overflow-hidden flex flex-col"
+    style="height: 500px; max-height: calc(100vh - 8rem); background-color: var(--color-cream);"
+  >
+    <!-- Header -->
+    <div class="px-5 py-4 border-b border-(--color-rule-light)" style="background-color: var(--color-cream-warm);">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-(--color-accent) flex items-center justify-center text-white text-sm font-semibold">JA</div>
+        <div>
+          <p class="font-serif font-semibold text-(--color-ink) text-sm leading-tight">Ask about Jacob</p>
+          <p class="text-xs text-(--color-ink-muted) mt-0.5">AI assistant · Educational only</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="chat-messages" class="flex-1 overflow-y-auto px-5 py-4 space-y-4" style="scroll-behavior: smooth;">
+      <!-- Welcome message -->
+      <div class="flex gap-3">
+        <div class="w-7 h-7 rounded-full bg-(--color-accent) flex-shrink-0 flex items-center justify-center text-white text-xs font-semibold mt-0.5">JA</div>
+        <div class="bg-(--color-cream-warm) border border-(--color-rule-light) rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]">
+          <p class="text-sm text-(--color-ink-light) leading-relaxed">Hey — I'm an AI assistant here to answer questions about Jacob, his real estate philosophy, and what he's building. What would you like to know?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="px-4 py-3 border-t border-(--color-rule-light)" style="background-color: var(--color-cream-warm);">
+      <form id="chat-form" class="flex gap-2">
+        <input
+          id="chat-input"
+          type="text"
+          placeholder="Ask something..."
+          autocomplete="off"
+          maxlength="500"
+          class="flex-1 px-4 py-2.5 text-sm rounded-xl border border-(--color-rule) focus:border-(--color-accent) focus:outline-none transition-colors"
+          style="background-color: var(--color-cream); color: var(--color-ink);"
+        />
+        <button
+          type="submit"
+          id="chat-send"
+          class="px-4 py-2.5 rounded-xl bg-(--color-accent) hover:bg-(--color-accent-dark) text-white text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Send
+        </button>
+      </form>
+      <p class="text-[10px] text-(--color-ink-muted) mt-2 text-center leading-tight">Not financial advice. For informational purposes only.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('chat-toggle')!;
+  const window_ = document.getElementById('chat-window')!;
+  const iconOpen = document.getElementById('chat-icon-open')!;
+  const iconClose = document.getElementById('chat-icon-close')!;
+  const form = document.getElementById('chat-form')! as HTMLFormElement;
+  const input = document.getElementById('chat-input')! as HTMLInputElement;
+  const messagesEl = document.getElementById('chat-messages')!;
+  const sendBtn = document.getElementById('chat-send')! as HTMLButtonElement;
+
+  let isOpen = false;
+  let messages: Array<{ role: string; content: string }> = [];
+  let isLoading = false;
+
+  toggle.addEventListener('click', () => {
+    isOpen = !isOpen;
+    window_.classList.toggle('hidden', !isOpen);
+    iconOpen.classList.toggle('hidden', isOpen);
+    iconClose.classList.toggle('hidden', !isOpen);
+    if (isOpen) input.focus();
+  });
+
+  function addMessage(role: string, content: string) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex gap-3' + (role === 'user' ? ' justify-end' : '');
+
+    if (role === 'assistant') {
+      wrapper.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-(--color-accent) flex-shrink-0 flex items-center justify-center text-white text-xs font-semibold mt-0.5">JA</div>
+        <div class="bg-(--color-cream-warm) border border-(--color-rule-light) rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]">
+          <p class="text-sm text-(--color-ink-light) leading-relaxed">${escapeHtml(content)}</p>
+        </div>
+      `;
+    } else {
+      wrapper.innerHTML = `
+        <div class="bg-(--color-accent) text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%]">
+          <p class="text-sm leading-relaxed">${escapeHtml(content)}</p>
+        </div>
+      `;
+    }
+
+    messagesEl.appendChild(wrapper);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function addLoadingIndicator(): HTMLElement {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex gap-3';
+    wrapper.id = 'chat-loading';
+    wrapper.innerHTML = `
+      <div class="w-7 h-7 rounded-full bg-(--color-accent) flex-shrink-0 flex items-center justify-center text-white text-xs font-semibold mt-0.5">JA</div>
+      <div class="bg-(--color-cream-warm) border border-(--color-rule-light) rounded-2xl rounded-tl-sm px-4 py-3">
+        <div class="flex gap-1.5 items-center h-5">
+          <span class="w-2 h-2 rounded-full bg-(--color-ink-muted) animate-bounce" style="animation-delay: 0ms;"></span>
+          <span class="w-2 h-2 rounded-full bg-(--color-ink-muted) animate-bounce" style="animation-delay: 150ms;"></span>
+          <span class="w-2 h-2 rounded-full bg-(--color-ink-muted) animate-bounce" style="animation-delay: 300ms;"></span>
+        </div>
+      </div>
+    `;
+    messagesEl.appendChild(wrapper);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return wrapper;
+  }
+
+  function escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  async function sendMessage(content: string) {
+    if (isLoading || !content.trim()) return;
+    isLoading = true;
+    sendBtn.disabled = true;
+
+    messages.push({ role: 'user', content: content.trim() });
+    addMessage('user', content.trim());
+    input.value = '';
+
+    const loader = addLoadingIndicator();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages }),
+      });
+
+      const data = await res.json();
+      loader.remove();
+
+      if (data.error) {
+        addMessage('assistant', data.error);
+      } else {
+        messages.push({ role: 'assistant', content: data.reply });
+        addMessage('assistant', data.reply);
+      }
+    } catch {
+      loader.remove();
+      addMessage('assistant', 'Connection error. Please try again.');
+    } finally {
+      isLoading = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sendMessage(input.value);
+  });
+</script>

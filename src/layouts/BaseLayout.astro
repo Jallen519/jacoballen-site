@@ -1,5 +1,6 @@
 ---
 import SEOHead from '../components/SEOHead.astro';
+import ChatWidget from '../components/ChatWidget.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -25,5 +26,6 @@ const fullTitle = title === 'Home' ? 'Jacob Allen' : `${title} | Jacob Allen`;
   </head>
   <body class="font-sans antialiased">
     <slot />
+    <ChatWidget />
   </body>
 </html>
